@@ -1,4 +1,4 @@
-{{- define "Deployment-UDR" -}}
+{{- define "Deployment-UDM" -}}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -19,36 +19,36 @@ spec:
     metadata:
       labels: {{- include "helpers.labels.labels" . | nindent 8 }}
       annotations:
-       checksum/config: {{ include "helpers.config.hash" ( dict "Global" $ "TemplateName" "ConfigMap-UDR.yaml" ) }}
+       checksum/config: {{ include "helpers.config.hash" ( dict "Global" $ "TemplateName" "ConfigMap-UDM.yaml" ) }}
     spec:
       nodeSelector:
-{{ include "helpers.pod.node_selector" ( dict "Global" $ "Application" "udr" ) | nindent 8 }}
+{{ include "helpers.pod.node_selector" ( dict "Global" $ "Application" "udm" ) | nindent 8 }}
       containers:
-      - name: udr
-        image: {{ include "helpers.pod.container.image" ( dict "Global" $ "Application" "udr" ) }}
+      - name: udm
+        image: {{ include "helpers.pod.container.image" ( dict "Global" $ "Application" "udm" ) }}
         imagePullPolicy: {{ .Values.images.pull.policy | quote }}
         command:
-          - /usr/bin/open5gs-udrd
+          - /usr/bin/open5gs-udmd
         args:
           - -c
-          - /etc/open5gs/udr.yaml
+          - /etc/open5gs/udm.yaml
         volumeMounts:
           - name: config
-            mountPath: /etc/open5gs/udr.yaml
-            subPath: udr.yaml
+            mountPath: /etc/open5gs/udm.yaml
+            subPath: udm.yaml
         livenessProbe:
           tcpSocket:
-            port: {{ index $.Values.config "udr.yaml" "udr" "sbi" "port" }}
+            port: {{ index $.Values.config "udm.yaml" "udm" "sbi" "port" }}
         readinessProbe:
           tcpSocket:
-            port: {{ index $.Values.config "udr.yaml" "udr" "sbi" "port" }}
+            port: {{ index $.Values.config "udm.yaml" "udm" "sbi" "port" }}
       volumes:
       - name: config
         configMap:
           name: {{ template "helpers.labels.fullname" . }}
           items:
-          - key: udr.yaml
-            path: udr.yaml
+          - key: udm.yaml
+            path: udm.yaml
 ...
 {{- end -}}
-{{- include "helpers.template.overlay" ( dict "Global" $ "template_definition" "Deployment-UDR" ) }}
+{{- include "helpers.template.overlay" ( dict "Global" $ "template_definition" "Deployment-UDM" ) }}

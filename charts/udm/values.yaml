@@ -1,21 +1,19 @@
 images:
   applications:
-    udr:
+    udm:
       tag: latest
-      name: port/open5gs-udr
+      name: port/open5gs-udm
       repo: quay.io
   pull:
     policy: Always
 
 node_labels:
-  udr:
+  udm:
     key: kubernetes.io/os
     value: linux
 
 config:
-  udr.yaml:
-    db_uri: mongodb://mongodb/open5gs
-
+  udm.yaml:
     #
     # logger:
     #
@@ -34,13 +32,13 @@ config:
     #
     #  o Set OGS_LOG_TRACE to all domain level
     #    level: trace
-    #    domain: core,sbi,udr,event,tlv,mem,sock
+    #    domain: core,sbi,udm,event,tlv,mem,sock
     #
     logger:
         file: /dev/stdout
         level: debug
     #
-    # udr:
+    # udm:
     #
     #  <SBI Server>
     #
@@ -57,31 +55,31 @@ config:
     #  o SBI Server(https://<all address avaiable>:443)
     #    sbi:
     #        tls:
-    #          key: udr.key
-    #          pem: udr.pem
+    #          key: udm.key
+    #          pem: udm.pem
     #
-    #  o SBI Server(https://127.0.0.20:443, http://[::1]:80)
+    #  o SBI Server(https://127.0.0.12:443, http://[::1]:80)
     #    sbi:
-    #      - addr: 127.0.0.20
+    #      - addr: 127.0.0.12
     #        tls:
-    #          key: udr.key
-    #          pem: udr.pem
+    #          key: udm.key
+    #          pem: udm.pem
     #      - addr: ::1
     #
-    #  o SBI Server(http://udr.open5gs.org:80)
+    #  o SBI Server(http://udm.open5gs.org:80)
     #    sbi:
-    #      name: udr.open5gs.org
+    #      name: udm.open5gs.org
     #
-    #  o SBI Server(http://127.0.0.20:7777)
+    #  o SBI Server(http://127.0.0.12:7777)
     #    sbi:
-    #      - addr: 127.0.0.20
+    #      - addr: 127.0.0.12
     #        port: 7777
     #
     #  o SBI Server(http://<eth0 IP address>:80)
     #    sbi:
     #      dev: eth0
     #
-    udr:
+    udm:
         sbi:
           addr:
             - 0.0.0.0
@@ -188,14 +186,6 @@ config:
     #
     #    nf_instance:
     #      heartbeat: 20
-    #
-    #  o NF Instance Heartbeat (Disabled)
-    #    nf_instance:
-    #      heartbeat: 0
-    #
-    #  o NF Instance Heartbeat (10 seconds)
-    #    nf_instance:
-    #      heartbeat: 10
     #
     #  o Message Wait Duration (Default : 10,000 ms = 10 seconds)
     #
